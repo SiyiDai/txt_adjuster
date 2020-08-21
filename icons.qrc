@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file alias="icons/check.png">icons/check.png</file>
+        <file alias="icons/goback.png">icons/goback.png</file>
+        <file alias="icons/logo.png">icons/logo.png</file>
+        <file alias="icons/save.png">icons/save.png</file>
+        <file alias="icons/wand.png">icons/wand.png</file>
+    </qresource>
+</RCC>
