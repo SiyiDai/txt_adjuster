@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'ui_design.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -123,11 +121,10 @@ class Ui_Form(object):
         self.label_size = QtWidgets.QLabel(self.group_input_text)
         self.label_size.setObjectName("label_size")
         self.horizontalLayout_3.addWidget(self.label_size)
-        self.size_chooser = QtWidgets.QComboBox(self.group_input_text)
+        self.size_chooser = QtWidgets.QSpinBox(self.group_input_text)
+        self.size_chooser.setMaximum(300)
+        self.size_chooser.setProperty("value", 12)
         self.size_chooser.setObjectName("size_chooser")
-        self.size_chooser.addItem("")
-        self.size_chooser.addItem("")
-        self.size_chooser.addItem("")
         self.horizontalLayout_3.addWidget(self.size_chooser)
         self.btn_check = QtWidgets.QCheckBox(self.group_input_text)
         self.btn_check.setObjectName("btn_check")
@@ -171,12 +168,20 @@ class Ui_Form(object):
         self.group_input_text.setTitle(_translate("Form", "Step 3. Input Text"))
         self.label_font.setText(_translate("Form", "Font"))
         self.label_size.setText(_translate("Form", "Size"))
-        self.size_chooser.setItemText(0, _translate("Form", "Small"))
-        self.size_chooser.setItemText(1, _translate("Form", "Medium"))
-        self.size_chooser.setItemText(2, _translate("Form", "Large"))
         self.btn_check.setText(_translate("Form", "With Rect"))
         self.btn_apply_text.setText(_translate("Form", "Apply"))
         self.btn_save_image.setText(_translate("Form", "Save"))
         self.btn_goback_position.setText(_translate("Form", "Go Back"))
+
 from plugin_viewer import Viewer
 import icons_rc
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())
+

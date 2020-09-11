@@ -61,7 +61,7 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
         fp = os.path.abspath(fp)
         self.current_image = fp
         self.current_pix = QtGui.QPixmap(fp)
-        print(self.current_pix.size())
+        # print(self.current_pix.size())
         self.save_last_directory(dir_path=os.path.dirname(fp))
         self.graphics_viewer.display_pix(pix=self.current_pix)
 
@@ -88,7 +88,7 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
 
     def handle_switch_to_input_text(self):
         if self.text_pos == (0, 0, 0, 0):
-            return self.show_warning_message(message='Please Create a Rect with Mouse', parent=self, title='Warning', only_yes=True)
+            return self.show_warning_message(message='Please choose an area!', parent=self, title='Warning', only_yes=True)
 
         self.__hide_all()
         self.group_input_text.show()
@@ -96,6 +96,7 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
         self.handle_toggle_rect()
 
     def handle_user_pick_position(self, text_pos):
+        # save and update the chosen area
         x, y, w, h = text_pos
         self.edit_x.setText(f'{x:.0f}')
         self.edit_y.setText(f'{y:.0f}')
@@ -106,10 +107,12 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
 
     def handle_display_text(self):
         txt = self.edit_txt.toPlainText()
+        # txt.setWordWrapMode(QtGui.QTextOption.WrapMode)
         if not txt:
-            return self.show_warning_message(message='Please Input Some Text', title='Please Input Some Text', parent=self, only_yes=True)
+            return self.show_warning_message(message='Please input some text', parent=self, title='Warning', only_yes=True)
+        
         font = self.font_chooser.currentFont()
-        size = config.font_size[self.size_chooser.currentIndex()]
+        size = self.size_chooser.value()
         font.setPixelSize(size)
         metrics = QtGui.QFontMetrics(font)
         x, y, w, h = self.text_pos
@@ -118,8 +121,7 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
 
         if r.width() * r.height() > w * h:
             resp = self.show_warning_message(
-                message='The area your chosen can not hold that much txt your typed without '
-                        'some adjustment line line break. '
+                message='The text is too long for the area being chosen. '
                         'Try break long lines?',
                 title='Warning',
                 parent=self, only_yes=False)
@@ -127,7 +129,6 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
                 return self.graphics_viewer.display_text(txt=txt, font=font)
 
         def break_line(line: str, width: int) -> typing.List[str]:
-            """折行算法"""
             length = len(line)
             ls = [0]
             while True:
@@ -155,7 +156,7 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
                 results.append(line[ls[i]: ls[i+1]])
             return results
 
-        lines = txt.split('\n')  # 用户换行
+        lines = txt.split('\n')  # break line
         pieces = []
 
         for line in lines:
@@ -175,10 +176,10 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
         self.graphics_viewer.display_text('\n'.join(pieces), font=font)
 
     def handle_save_image(self):
-        """保存修改的图片"""
+        """save modified image"""
         ld = self.get_last_directory()
         fp, _ext = QtWidgets.QFileDialog.getSaveFileName(
-            parent=self, caption='Save Image', directory=ld, filter='Png Image(*.png)'
+            parent=self, caption='Save image', directory=ld, filter='Png Image(*.png)'
             )
         if not fp:
             return
@@ -194,9 +195,9 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
             self.graphics_viewer.hide_rect()
 
 
-if __name__ == '__main__':
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    m = WidgetMain()
-    m.show()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     m = WidgetMain()
+#     m.show()
+#     sys.exit(app.exec_())

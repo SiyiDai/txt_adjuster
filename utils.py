@@ -20,9 +20,9 @@ class AbstractFunction(object):
         self.move(qtRectangle.topLeft())
 
     @classmethod
-    def show_warning_message(cls, message: str, title: str = '警告', detail: str = None, extra: str = None, parent=None,
+    def show_warning_message(cls, message: str, title: str = 'Warning', detail: str = None, extra: str = None, parent=None,
                              only_yes: bool = False):
-        '''显示警告信息'''
+        '''show warning msg'''
         msg_box = QtWidgets.QMessageBox(parent=parent)
         msg_box.setIcon(QtWidgets.QMessageBox.Warning)
         msg_box.setText(message)
@@ -52,9 +52,9 @@ class AbstractFunction(object):
             return False
 
     @classmethod
-    def show_info_message(cls, message: str, title='提醒', detail: str = None, extra: str = None, parent=None,
+    def show_info_message(cls, message: str, title='Notification', detail: str = None, extra: str = None, parent=None,
                           only_yes: bool = False):
-        '''显示提醒信息'''
+        '''show notification msg'''
         msg_box = QtWidgets.QMessageBox(parent=parent)
         msg_box.setIcon(QtWidgets.QMessageBox.Information)
         msg_box.setText(message)
@@ -83,16 +83,16 @@ class AbstractFunction(object):
         else:
             return False
 
-    @classmethod
-    def get_machine_uid(cls):
-        uid = uuid.UUID(int=uuid.getnode()).hex[20:]
-        return cls.__load_default_config().get('machine_uid') or uid
+    # @classmethod
+    # def get_machine_uid(cls):
+    #     uid = uuid.UUID(int=uuid.getnode()).hex[20:]
+    #     return cls.__load_default_config().get('machine_uid') or uid
 
-    @classmethod
-    def save_machine_uid(cls, machine_uid: str):
-        data = cls.__load_default_config()
-        data['machine_uid'] = machine_uid
-        cls.__save_default_config(data)
+    # @classmethod
+    # def save_machine_uid(cls, machine_uid: str):
+    #     data = cls.__load_default_config()
+    #     data['machine_uid'] = machine_uid
+    #     cls.__save_default_config(data)
 
     @classmethod
     def get_last_directory(cls):

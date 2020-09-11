@@ -5,9 +5,9 @@ import math
 
 
 class Viewer(QtWidgets.QGraphicsView):
-    # 背景区域颜色
+    # color of frame background
     backgroundColor = QtGui.QColor(31, 31, 47)
-    # 边框颜色
+    # color of frame border
     borderColor = QtGui.QColor(58, 58, 90)
 
     sig_position = QtCore.pyqtSignal(tuple)
@@ -15,23 +15,23 @@ class Viewer(QtWidgets.QGraphicsView):
     def __init__(self, parent=None, *args, **kwargs):
         super().__init__(parent=parent, *args, **kwargs)
 
-        self.setBackgroundBrush(self.backgroundColor)  # 设置背景色
+        self.setBackgroundBrush(self.backgroundColor)  # set background color
 
-        self.setOptimizationFlag(self.DontSavePainterState)  # 渲染时，不保存 painter 的状态
+        self.setOptimizationFlag(self.DontSavePainterState)
 
         self.setRenderHints(
-            QtGui.QPainter.Antialiasing | QtGui.QPainter.TextAntialiasing | QtGui.QPainter.SmoothPixmapTransform)  # 设置抗锯齿
+            QtGui.QPainter.Antialiasing | QtGui.QPainter.TextAntialiasing | QtGui.QPainter.SmoothPixmapTransform)
 
-        if QtOpenGL.QGLFormat.hasOpenGL():  # 支持 OpenGL 的系统开始高质量抗锯齿
+        if QtOpenGL.QGLFormat.hasOpenGL():  
             self.setRenderHint(QtGui.QPainter.HighQualityAntialiasing)
 
-        self.setResizeAnchor(self.AnchorUnderMouse)  # 鼠标当前位置被用作锚点
+        self.setResizeAnchor(self.AnchorUnderMouse)  # set the current position of mouse as anchor
 
-        self.setRubberBandSelectionMode(QtCore.Qt.IntersectsItemShape)  # 输出列表包含其形状完全包含在选择区域内的项目以及与区域轮廓相交的项目
+        self.setRubberBandSelectionMode(QtCore.Qt.IntersectsItemShape) 
 
-        self.setTransformationAnchor(self.AnchorUnderMouse)  # 鼠标当前位置被用作锚点
+        self.setTransformationAnchor(self.AnchorUnderMouse) 
 
-        self.setViewportUpdateMode(self.SmartViewportUpdate)  # QGraphicsView将尝试通过分析需要重绘的区域来找到最佳的更新模式。
+        self.setViewportUpdateMode(self.SmartViewportUpdate)  
 
         self._scene = QtWidgets.QGraphicsScene(self)
         self.setScene(self._scene)
@@ -45,9 +45,9 @@ class Viewer(QtWidgets.QGraphicsView):
         self.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
         self.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignVCenter|QtCore.Qt.AlignHCenter)
 
-        # 允许拖拽放大后的图片
+        # enable zoom in 
         self.setAcceptDrops(True)
-        self.setDragMode(QtWidgets.QGraphicsView.NoDrag)  # 光标变成指针，拖动鼠标将滚动滚动条。 该模式可以在交互式和非交互式模式下工作
+        self.setDragMode(QtWidgets.QGraphicsView.NoDrag) 
 
         self.last = "Click"
 
@@ -69,7 +69,7 @@ class Viewer(QtWidgets.QGraphicsView):
         self.point_b = 0, 0
 
     def wheelEvent(self, event: QtGui.QWheelEvent) -> None:
-        '''滑轮事件 --- 按下 Ctrl 键时滚动鼠标滚轮时缩放'''
+        '''press 'ctrl' with wheel event to zoom in/out'''
         if event.modifiers() & QtCore.Qt.ControlModifier:
             self.scaleView(math.pow(2.0, event.angleDelta().y() / 240.0))
             return event.accept()
@@ -82,7 +82,7 @@ class Viewer(QtWidgets.QGraphicsView):
         self.scale(scaleFactor, scaleFactor)
 
     def display_pix(self, pix: QtGui.QPixmap):
-        '''更新展示的图片'''
+        '''update the pic to display'''
         if not isinstance(pix, QtGui.QPixmap):
             raise TypeError
         self._pix_item.setPixmap(pix)
@@ -91,7 +91,7 @@ class Viewer(QtWidgets.QGraphicsView):
         self._scene.update()
 
     def clear_pix(self):
-        '''清空显示的图片'''
+        '''clear out the pic'''
         self._pix_item.setPixmap(QtGui.QPixmap())
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
