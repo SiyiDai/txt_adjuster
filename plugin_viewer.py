@@ -20,18 +20,19 @@ class Viewer(QtWidgets.QGraphicsView):
         self.setOptimizationFlag(self.DontSavePainterState)
 
         self.setRenderHints(
-            QtGui.QPainter.Antialiasing | QtGui.QPainter.TextAntialiasing | QtGui.QPainter.SmoothPixmapTransform)
+            QtGui.QPainter.Antialiasing | QtGui.QPainter.TextAntialiasing | QtGui.QPainter.SmoothPixmapTransform
+        )
 
-        if QtOpenGL.QGLFormat.hasOpenGL():  
+        if QtOpenGL.QGLFormat.hasOpenGL():
             self.setRenderHint(QtGui.QPainter.HighQualityAntialiasing)
 
         self.setResizeAnchor(self.AnchorUnderMouse)  # set the current position of mouse as anchor
 
-        self.setRubberBandSelectionMode(QtCore.Qt.IntersectsItemShape) 
+        self.setRubberBandSelectionMode(QtCore.Qt.IntersectsItemShape)
 
-        self.setTransformationAnchor(self.AnchorUnderMouse) 
+        self.setTransformationAnchor(self.AnchorUnderMouse)
 
-        self.setViewportUpdateMode(self.SmartViewportUpdate)  
+        self.setViewportUpdateMode(self.SmartViewportUpdate)
 
         self._scene = QtWidgets.QGraphicsScene(self)
         self.setScene(self._scene)
@@ -43,11 +44,11 @@ class Viewer(QtWidgets.QGraphicsView):
         # self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
         self.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
-        self.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignVCenter|QtCore.Qt.AlignHCenter)
+        self.setAlignment(QtCore.Qt.AlignJustify | QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
 
-        # enable zoom in 
+        # enable zoom in
         self.setAcceptDrops(True)
-        self.setDragMode(QtWidgets.QGraphicsView.NoDrag) 
+        self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
 
         self.last = "Click"
 
@@ -69,7 +70,7 @@ class Viewer(QtWidgets.QGraphicsView):
         self.point_b = 0, 0
 
     def wheelEvent(self, event: QtGui.QWheelEvent) -> None:
-        '''press 'ctrl' with wheel event to zoom in/out'''
+        """press 'ctrl' with wheel event to zoom in/out"""
         if event.modifiers() & QtCore.Qt.ControlModifier:
             self.scaleView(math.pow(2.0, event.angleDelta().y() / 240.0))
             return event.accept()
@@ -82,7 +83,7 @@ class Viewer(QtWidgets.QGraphicsView):
         self.scale(scaleFactor, scaleFactor)
 
     def display_pix(self, pix: QtGui.QPixmap):
-        '''update the pic to display'''
+        """update the pic to display"""
         if not isinstance(pix, QtGui.QPixmap):
             raise TypeError
         self._pix_item.setPixmap(pix)
@@ -91,7 +92,7 @@ class Viewer(QtWidgets.QGraphicsView):
         self._scene.update()
 
     def clear_pix(self):
-        '''clear out the pic'''
+        """clear out the pic"""
         self._pix_item.setPixmap(QtGui.QPixmap())
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
@@ -136,9 +137,9 @@ class Viewer(QtWidgets.QGraphicsView):
 
     def mouseReleaseEvent(self, event: QtGui.QMouseEvent) -> None:
         if self.last == "Click":
-            print('click')
+            print("click")
         else:
-            print('Double Click')
+            print("Double Click")
 
     def mouseDoubleClickEvent(self, event: QtGui.QMouseEvent) -> None:
         self.last = "Double Click"
@@ -157,7 +158,7 @@ class Viewer(QtWidgets.QGraphicsView):
         self.item_text.setPlainText(txt)
 
     def clear_text(self):
-        self.item_text.setPlainText('')
+        self.item_text.setPlainText("")
 
     def hide_rect(self):
         self.item_rect.hide()
@@ -171,20 +172,7 @@ class Viewer(QtWidgets.QGraphicsView):
         painter = QtGui.QPainter(pix)
         painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         self.scene().render(
-            painter,
-            self._pix_item.boundingRect(),
-            self._pix_item.boundingRect(),
-            QtCore.Qt.KeepAspectRatio,
-            )
+            painter, self._pix_item.boundingRect(), self._pix_item.boundingRect(), QtCore.Qt.KeepAspectRatio,
+        )
         painter.end()
         return pix
-
-
-
-
-
-
-
-
-
-

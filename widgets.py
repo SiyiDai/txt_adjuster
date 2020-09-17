@@ -27,7 +27,7 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
 
         self.setLayout(layout)
 
-        self.current_image = ''
+        self.current_image = ""
         self.current_pix = QtGui.QPixmap()
         self.text_pos = 0, 0, 0, 0
 
@@ -54,8 +54,8 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
     def handle_choose_a_image(self):
         ld = self.get_last_directory()
         fp, _etx = QtWidgets.QFileDialog.getOpenFileName(
-            parent=self, caption='Choose An Image', directory=ld, filter='Image Files(*.jpg *.jpeg *.png)'
-            )
+            parent=self, caption="Choose An Image", directory=ld, filter="Image Files(*.jpg *.jpeg *.png)"
+        )
         if not fp:
             return
         fp = os.path.abspath(fp)
@@ -68,8 +68,8 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
     def handle_switch_to_decide_position(self):
         if not self.current_image:
             return self.show_warning_message(
-                message='Please Choose An Image',
-                title='Please Choose Image', parent=self, only_yes=True)
+                message="Please Choose An Image", title="Please Choose Image", parent=self, only_yes=True
+            )
         self.__hide_all()
         self.group_decide_position.show()
         self.graphics_viewer.setAllowDrawRect(True)
@@ -88,7 +88,9 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
 
     def handle_switch_to_input_text(self):
         if self.text_pos == (0, 0, 0, 0):
-            return self.show_warning_message(message='Please choose an area!', parent=self, title='Warning', only_yes=True)
+            return self.show_warning_message(
+                message="Please choose an area!", parent=self, title="Warning", only_yes=True
+            )
 
         self.__hide_all()
         self.group_input_text.show()
@@ -98,10 +100,10 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
     def handle_user_pick_position(self, text_pos):
         # save and update the chosen area
         x, y, w, h = text_pos
-        self.edit_x.setText(f'{x:.0f}')
-        self.edit_y.setText(f'{y:.0f}')
-        self.edit_w.setText(f'{w:.0f}')
-        self.edit_h.setText(f'{h:.0f}')
+        self.edit_x.setText(f"{x:.0f}")
+        self.edit_y.setText(f"{y:.0f}")
+        self.edit_w.setText(f"{w:.0f}")
+        self.edit_h.setText(f"{h:.0f}")
 
         self.text_pos = text_pos
 
@@ -109,8 +111,10 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
         txt = self.edit_txt.toPlainText()
         # txt.setWordWrapMode(QtGui.QTextOption.WrapMode)
         if not txt:
-            return self.show_warning_message(message='Please input some text', parent=self, title='Warning', only_yes=True)
-        
+            return self.show_warning_message(
+                message="Please input some text", parent=self, title="Warning", only_yes=True
+            )
+
         font = self.font_chooser.currentFont()
         size = self.size_chooser.value()
         font.setPixelSize(size)
@@ -121,10 +125,11 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
 
         if r.width() * r.height() > w * h:
             resp = self.show_warning_message(
-                message='The text is too long for the area being chosen. '
-                        'Try break long lines?',
-                title='Warning',
-                parent=self, only_yes=False)
+                message="The text is too long for the area being chosen. " "Try break long lines?",
+                title="Warning",
+                parent=self,
+                only_yes=False,
+            )
             if resp is False:
                 return self.graphics_viewer.display_text(txt=txt, font=font)
 
@@ -139,7 +144,7 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
                 if s <= width:
                     break
                 for i in range(1, length):
-                    t = line[last:last + i]
+                    t = line[last : last + i]
                     rect = metrics.boundingRect(0, 0, 0, 0, QtCore.Qt.AlignLeft, t)
                     s = rect.width()
 
@@ -153,40 +158,41 @@ class WidgetMain(QtWidgets.QWidget, Ui_Form, AbstractFunction):
             ls.append(length)
             results = []
             for i in range(len(ls) - 1):
-                results.append(line[ls[i]: ls[i+1]])
+                results.append(line[ls[i] : ls[i + 1]])
             return results
 
-        lines = txt.split('\n')  # break line
+        lines = txt.split("\n")  # break line
         pieces = []
 
         for line in lines:
             pieces.extend(break_line(line=line, width=w))
 
-        r = metrics.boundingRect(int(x), int(y), int(w), int(h), QtCore.Qt.AlignLeft, '\n'.join(pieces))
+        r = metrics.boundingRect(int(x), int(y), int(w), int(h), QtCore.Qt.AlignLeft, "\n".join(pieces))
 
         if r.width() * r.height() > w * h:
             resp = self.show_warning_message(
-                message='The area your chosen can not hold that much txt your typed even after line break. '
-                        'Hit Yes, the txt on the image will be cleared',
-                title='Warning',
+                message="The area your chosen can not hold that much txt your typed even after line break. "
+                "Hit Yes, the txt on the image will be cleared",
+                title="Warning",
                 parent=self,
-                only_yes=False)
+                only_yes=False,
+            )
             if resp:
                 return self.graphics_viewer.clear_text()
-        self.graphics_viewer.display_text('\n'.join(pieces), font=font)
+        self.graphics_viewer.display_text("\n".join(pieces), font=font)
 
     def handle_save_image(self):
         """save modified image"""
         ld = self.get_last_directory()
         fp, _ext = QtWidgets.QFileDialog.getSaveFileName(
-            parent=self, caption='Save image', directory=ld, filter='Png Image(*.png)'
-            )
+            parent=self, caption="Save image", directory=ld, filter="Png Image(*.png)"
+        )
         if not fp:
             return
         fp = os.path.abspath(fp)
         self.save_last_directory(dir_path=os.path.dirname(fp))
         pix = self.graphics_viewer.save_image()
-        pix.save(fp, 'PNG')
+        pix.save(fp, "PNG")
 
     def handle_toggle_rect(self):
         if self.btn_check.checkState() == QtCore.Qt.Checked:

@@ -1,18 +1,12 @@
 # coding: utf-8
 
-import csv
 import os
 import config
-from datetime import datetime, date
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 import json
-import uuid
-import typing
-import zipfile
 
 
 class AbstractFunction(object):
-
     def move_to_center(self):
         qtRectangle = self.frameGeometry()
         centerPoint = QtWidgets.QDesktopWidget().availableGeometry().center()
@@ -20,9 +14,16 @@ class AbstractFunction(object):
         self.move(qtRectangle.topLeft())
 
     @classmethod
-    def show_warning_message(cls, message: str, title: str = 'Warning', detail: str = None, extra: str = None, parent=None,
-                             only_yes: bool = False):
-        '''show warning msg'''
+    def show_warning_message(
+        cls,
+        message: str,
+        title: str = "Warning",
+        detail: str = None,
+        extra: str = None,
+        parent=None,
+        only_yes: bool = False,
+    ):
+        """show warning msg"""
         msg_box = QtWidgets.QMessageBox(parent=parent)
         msg_box.setIcon(QtWidgets.QMessageBox.Warning)
         msg_box.setText(message)
@@ -34,13 +35,13 @@ class AbstractFunction(object):
         if only_yes is True:
             msg_box.setStandardButtons(QtWidgets.QMessageBox.Yes)
             btn_yes = msg_box.button(QtWidgets.QMessageBox.Yes)
-            btn_yes.setText('Yes')
+            btn_yes.setText("Yes")
         else:
             msg_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
             btn_yes = msg_box.button(QtWidgets.QMessageBox.Yes)
-            btn_yes.setText('Yes')
+            btn_yes.setText("Yes")
             btn_no = msg_box.button(QtWidgets.QMessageBox.No)
-            btn_no.setText('Ignore')
+            btn_no.setText("Ignore")
 
         msg_box.setDefaultButton(QtWidgets.QMessageBox.Yes)
         msg_box.setEscapeButton(QtWidgets.QMessageBox.No)
@@ -52,9 +53,16 @@ class AbstractFunction(object):
             return False
 
     @classmethod
-    def show_info_message(cls, message: str, title='Notification', detail: str = None, extra: str = None, parent=None,
-                          only_yes: bool = False):
-        '''show notification msg'''
+    def show_info_message(
+        cls,
+        message: str,
+        title="Notification",
+        detail: str = None,
+        extra: str = None,
+        parent=None,
+        only_yes: bool = False,
+    ):
+        """show notification msg"""
         msg_box = QtWidgets.QMessageBox(parent=parent)
         msg_box.setIcon(QtWidgets.QMessageBox.Information)
         msg_box.setText(message)
@@ -66,13 +74,13 @@ class AbstractFunction(object):
         if only_yes is True:
             msg_box.setStandardButtons(QtWidgets.QMessageBox.Yes)
             btn_yes = msg_box.button(QtWidgets.QMessageBox.Yes)
-            btn_yes.setText('Yes')
+            btn_yes.setText("Yes")
         else:
             msg_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
             btn_yes = msg_box.button(QtWidgets.QMessageBox.Yes)
-            btn_yes.setText('Yes')
+            btn_yes.setText("Yes")
             btn_no = msg_box.button(QtWidgets.QMessageBox.No)
-            btn_no.setText('No')
+            btn_no.setText("No")
 
         msg_box.setDefaultButton(QtWidgets.QMessageBox.Yes)
         msg_box.setEscapeButton(QtWidgets.QMessageBox.No)
@@ -83,21 +91,10 @@ class AbstractFunction(object):
         else:
             return False
 
-    # @classmethod
-    # def get_machine_uid(cls):
-    #     uid = uuid.UUID(int=uuid.getnode()).hex[20:]
-    #     return cls.__load_default_config().get('machine_uid') or uid
-
-    # @classmethod
-    # def save_machine_uid(cls, machine_uid: str):
-    #     data = cls.__load_default_config()
-    #     data['machine_uid'] = machine_uid
-    #     cls.__save_default_config(data)
-
     @classmethod
     def get_last_directory(cls):
         data = cls.__load_default_config()
-        return data.get('last_dir', config.base_dir)
+        return data.get("last_dir", config.base_dir)
 
     @classmethod
     def save_last_directory(cls, dir_path):
@@ -108,14 +105,14 @@ class AbstractFunction(object):
         if not os.path.isdir(dir_path):
             raise ValueError
         data = cls.__load_default_config()
-        data['last_dir'] = dir_path
+        data["last_dir"] = dir_path
         cls.__save_default_config(data=data)
 
     @classmethod
     def __save_default_config(cls, data: dict):
         if not isinstance(data, dict):
             raise TypeError
-        with open(config.app_config_fp, 'w', encoding='utf-8') as f:
+        with open(config.app_config_fp, "w", encoding="utf-8") as f:
             json.dump(data, f)
 
     @classmethod
@@ -125,6 +122,6 @@ class AbstractFunction(object):
             return data
         if not os.path.isfile(config.app_config_fp):
             return data
-        with open(config.app_config_fp, 'r', encoding='utf-8') as f:
+        with open(config.app_config_fp, "r", encoding="utf-8") as f:
             data = json.load(f)
         return data

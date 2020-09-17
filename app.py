@@ -2,7 +2,7 @@
 from widgets import QtWidgets, WidgetMain
 import sys
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     m = WidgetMain()
     m.show()
