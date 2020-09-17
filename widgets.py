@@ -1,3 +1,5 @@
+#widgets.py
+
 # coding: utf-8
 
 from utils import QtCore, QtWidgets, QtGui, AbstractFunction

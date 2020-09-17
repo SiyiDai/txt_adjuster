@@ -1,3 +1,5 @@
+#config.py
+
 # coding: utf-8
 
 import sys
